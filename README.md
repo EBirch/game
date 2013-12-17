@@ -1,3 +1,3 @@
 ###Dependencies:
-*[SFML](http://www.sfml-dev.org/)
-*[jsoncpp](http://jsoncpp.sourceforge.net/)
++[SFML](http://www.sfml-dev.org/)
++[jsoncpp](http://jsoncpp.sourceforge.net/)
