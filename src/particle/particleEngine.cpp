@@ -13,10 +13,15 @@ ParticleEngine::ParticleEngine(int maxParticles):
 {
 }
 
-void ParticleEngine::makeEffect(sf::Vector2<int> pos, int numParticles){
-	std::uniform_int_distribution<> colorDist(0, 255);
-	std::uniform_real_distribution<> velDist(0, 6.2832);
-	std::uniform_real_distribution<> speedDist(0.1, 10);
+void ParticleEngine::makeEffect(sf::Vector2<int> pos, ParticleEffect particleEffect, int rotate){
+	std::uniform_int_distribution<> particlesDist(particleEffect.minParticles, particleEffect.maxParticles);
+	std::uniform_int_distribution<> lifespanDist(particleEffect.minLifespan, particleEffect.maxLifespan);
+	std::uniform_int_distribution<> hueDist(particleEffect.minHue, particleEffect.maxHue);
+	std::uniform_real_distribution<> satDist(particleEffect.minSat, particleEffect.maxSat);
+	std::uniform_real_distribution<> valDist(particleEffect.minVal, particleEffect.maxVal);
+	std::uniform_real_distribution<> speedDist(particleEffect.minSpeed, particleEffect.maxSpeed);
+	std::uniform_real_distribution<> velDist(particleEffect.minAngle + rotate, particleEffect.maxAngle + rotate);
+	int numParticles = particlesDist(rng);
 	std::vector<std::future<bool>> futures;
 	std::mutex m;
 	for(int thread=0;thread<NUMTHREADS;++thread){
@@ -27,7 +32,7 @@ void ParticleEngine::makeEffect(sf::Vector2<int> pos, int numParticles){
 						return true;
 					}
 					float angle=velDist(rng);
-					auto particle=std::make_shared<Particle>(pos, sf::Vector2<float>(cos(angle), sin(angle)), speedDist(rng), sf::Color(colorDist(rng), colorDist(rng), colorDist(rng)));
+					auto particle=std::make_shared<Particle>(pos, sf::Vector2<float>(cos(angle), sin(angle)), speedDist(rng), hsv(hueDist(rng), satDist(rng), valDist(rng)));
 					{
 						std::lock_guard<std::mutex> guard(m);
 						particles.push_back(particle);
@@ -51,7 +56,6 @@ void ParticleEngine::updateParticles(sf::RenderWindow *window){
 		points[i++]=(part->vertex);
 	}
 	window->draw(points);
-	std::cout<<particles.size()<<std::endl;
 }
 
 void ParticleEngine::killParticles(){
@@ -63,4 +67,26 @@ void ParticleEngine::killParticles(){
 
 void ParticleEngine::killAll(){
 	particles.clear();
+}
+
+sf::Color ParticleEngine::hsv(int hue, float sat, float val){
+	hue %= 360;
+	while(hue<0){
+		hue += 360;
+	}
+	int h = hue / 60;
+	float f = float(hue) / 60 - h;
+	float p = val * (1.f - sat);
+	float q = val * (1.f - sat * f);
+	float t = val * (1.f - sat * (1 - f));
+	switch(h){
+		default:
+		case 0:
+		case 6: return sf::Color(val * 255, t * 255, p * 255);
+		case 1: return sf::Color(q * 255, val * 255, p * 255);
+		case 2: return sf::Color(p * 255, val * 255, t * 255);
+		case 3: return sf::Color(p * 255, q * 255, val * 255);
+		case 4: return sf::Color(t * 255, p * 255, val * 255);
+		case 5: return sf::Color(val * 255, p * 255, q * 255);
+	}
 }

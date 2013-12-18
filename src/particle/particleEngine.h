@@ -2,6 +2,7 @@
 #define PARTICLE_ENGINE_H
 
 #include "./particle.h"
+#include "./particleEffect.h"
 #include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
 #include <vector>
@@ -11,10 +12,11 @@
 class ParticleEngine{
 	public:
 		ParticleEngine(int maxParticles);
-		void updateParticles(sf::RenderWindow *window=NULL);
+		sf::Color hsv(int hue, float sat, float val);
+		void updateParticles(sf::RenderWindow *window = NULL);
 		void killParticles();
 		void killAll();
-		void makeEffect(sf::Vector2<int> pos, int numParticles);
+		void makeEffect(sf::Vector2<int> pos, ParticleEffect particleEffect, int rotate = 0);
 
 	private:
 		std::vector<std::shared_ptr<Particle>> particles;

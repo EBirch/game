@@ -34,9 +34,16 @@ int main(){
 
 	file.close();
 
+	file.open("./assets/particleEffects/explosion.json");
+	if(!reader.parse(file, root)){
+		std::cout<<"Error reading config file:\n"<<reader.getFormatedErrorMessages()<<std::endl;
+		return 0;
+	}
+
 	sf::RenderWindow window(sf::VideoMode(screenWidth, screenHeight), "SFML works!", fullscreen ? sf::Style::Fullscreen : sf::Style::Titlebar|sf::Style::Close);
 
 	ParticleEngine particleEngine(1000000);
+	ParticleEffect effect(root);
 
 	while (window.isOpen()){
 		sf::Event event;
@@ -46,7 +53,9 @@ int main(){
 		}
 
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left)){
-			particleEngine.makeEffect(sf::Mouse::getPosition(window), 1000);
+			particleEngine.makeEffect(sf::Mouse::getPosition(window), effect);
+			particleEngine.makeEffect(sf::Mouse::getPosition(window), effect, 90);
+			particleEngine.makeEffect(sf::Mouse::getPosition(window), effect, 180);
 		}
 
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Right)){
