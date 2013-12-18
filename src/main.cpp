@@ -39,11 +39,21 @@ int main(){
 		std::cout<<"Error reading config file:\n"<<reader.getFormatedErrorMessages()<<std::endl;
 		return 0;
 	}
+	file.close();
 
 	sf::RenderWindow window(sf::VideoMode(screenWidth, screenHeight), "SFML works!", fullscreen ? sf::Style::Fullscreen : sf::Style::Titlebar|sf::Style::Close);
 
 	ParticleEngine particleEngine(1000000);
-	ParticleEffect effect(root);
+	ParticleEffect explode(root);
+
+	file.open("./assets/particleEffects/ring.json");
+	if(!reader.parse(file, root)){
+		std::cout<<"Error reading config file:\n"<<reader.getFormatedErrorMessages()<<std::endl;
+		return 0;
+	}
+	file.close();
+
+	ParticleEffect ring(root);
 
 	while (window.isOpen()){
 		sf::Event event;
@@ -53,9 +63,10 @@ int main(){
 		}
 
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left)){
-			particleEngine.makeEffect(sf::Mouse::getPosition(window), effect);
-			particleEngine.makeEffect(sf::Mouse::getPosition(window), effect, 90);
-			particleEngine.makeEffect(sf::Mouse::getPosition(window), effect, 180);
+			particleEngine.makeEffect(sf::Mouse::getPosition(window), ring);
+			particleEngine.makeEffect(sf::Mouse::getPosition(window), explode);
+			// particleEngine.makeEffect(sf::Mouse::getPosition(window), effect, 90);
+			// particleEngine.makeEffect(sf::Mouse::getPosition(window), effect, 180);
 		}
 
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Right)){

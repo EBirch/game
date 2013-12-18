@@ -1,0 +1,18 @@
+{
+	"minParticles":3000,
+	"maxParticles":4000,
+	"minSpeed":10,
+	"maxSpeed":15,
+	"minLifespan":10,
+	"maxLifespan":15,
+	"minAngle":0,
+	"maxAngle":360,
+	"minHue":-20,
+	"maxHue":60,
+	"minSat":0.7,
+	"maxSat":0.9,
+	"minVal":0.7,
+	"maxVal":0.9,
+	"minRotation":0,
+	"maxRotation":0
+}

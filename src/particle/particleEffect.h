@@ -21,6 +21,8 @@ class ParticleEffect{
 		float maxSpeed;
 		float minAngle;
 		float maxAngle;
+		float minRotation;
+		float maxRotation;
 };
 
 #endif

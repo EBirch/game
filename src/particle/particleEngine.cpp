@@ -21,6 +21,7 @@ void ParticleEngine::makeEffect(sf::Vector2<int> pos, ParticleEffect particleEff
 	std::uniform_real_distribution<> valDist(particleEffect.minVal, particleEffect.maxVal);
 	std::uniform_real_distribution<> speedDist(particleEffect.minSpeed, particleEffect.maxSpeed);
 	std::uniform_real_distribution<> velDist(particleEffect.minAngle + rotate, particleEffect.maxAngle + rotate);
+	std::uniform_real_distribution<> rotationDist(particleEffect.minRotation, particleEffect.maxRotation);
 	int numParticles = particlesDist(rng);
 	std::vector<std::future<bool>> futures;
 	std::mutex m;
@@ -32,7 +33,7 @@ void ParticleEngine::makeEffect(sf::Vector2<int> pos, ParticleEffect particleEff
 						return true;
 					}
 					float angle=velDist(rng);
-					auto particle=std::make_shared<Particle>(pos, sf::Vector2<float>(cos(angle), sin(angle)), speedDist(rng), hsv(hueDist(rng), satDist(rng), valDist(rng)));
+					auto particle=std::make_shared<Particle>(pos, angle, speedDist(rng), rotationDist(rng), lifespanDist(rng), hsv(hueDist(rng), satDist(rng), valDist(rng)));
 					{
 						std::lock_guard<std::mutex> guard(m);
 						particles.push_back(particle);
@@ -47,12 +48,14 @@ void ParticleEngine::makeEffect(sf::Vector2<int> pos, ParticleEffect particleEff
 }
 
 void ParticleEngine::updateParticles(sf::RenderWindow *window){
-	displaySize=window->getSize();
+	displaySize = window->getSize();
 	sf::VertexArray points(sf::Points, particles.size());
 	int i = 0;
 	for(auto part : particles){
 		part->vertex.position = part->vertex.position + (part->vel * part->speed);
-		++part->lifespan;
+		part->angle += part->rotation;
+		part->vel = sf::Vector2<float>(cos(part->angle), sin(part->angle));
+		--part->lifespan;
 		points[i++]=(part->vertex);
 	}
 	window->draw(points);
@@ -61,7 +64,7 @@ void ParticleEngine::updateParticles(sf::RenderWindow *window){
 void ParticleEngine::killParticles(){
 	particles.erase(std::remove_if(particles.begin(), particles.end(),
 		[&](std::shared_ptr<Particle> part){
-			return (part->lifespan > 100) || ((part->vertex.position.x < -100 || part->vertex.position.x > displaySize.x + 100) || (part->vertex.position.y < -100 || part->vertex.position.y > displaySize.y + 100));
+			return (part->lifespan <= 0) || ((part->vertex.position.x < -100 || part->vertex.position.x > displaySize.x + 100) || (part->vertex.position.y < -100 || part->vertex.position.y > displaySize.y + 100));
 		}), particles.end());
 }
 
