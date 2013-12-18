@@ -16,7 +16,7 @@ class ParticleEngine{
 		void updateParticles(sf::RenderWindow *window = NULL);
 		void killParticles();
 		void killAll();
-		void makeEffect(sf::Vector2<int> pos, ParticleEffect particleEffect, float rotate = 0);
+		void makeEffect(sf::Vector2<int> pos, ParticleEffect particleEffect, float offset = 0);
 
 	private:
 		std::vector<std::shared_ptr<Particle>> particles;

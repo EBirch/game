@@ -63,8 +63,8 @@ int main(){
 		}
 
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left)){
-			particleEngine.makeEffect(sf::Mouse::getPosition(window), ring);
-			// particleEngine.makeEffect(sf::Mouse::getPosition(window), ring, 90);
+			particleEngine.makeEffect(sf::Mouse::getPosition(window), ring, 30);
+			particleEngine.makeEffect(sf::Mouse::getPosition(window), ring, 150);
 			// particleEngine.makeEffect(sf::Mouse::getPosition(window), ring, 180);
 			particleEngine.makeEffect(sf::Mouse::getPosition(window), explode);
 		}

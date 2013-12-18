@@ -13,20 +13,21 @@ ParticleEngine::ParticleEngine(int maxParticles):
 {
 }
 
-void ParticleEngine::makeEffect(sf::Vector2<int> pos, ParticleEffect particleEffect, float rotate){
+void ParticleEngine::makeEffect(sf::Vector2<int> pos, ParticleEffect particleEffect, float offset){
 	std::uniform_int_distribution<> particlesDist(particleEffect.minParticles, particleEffect.maxParticles);
 	std::uniform_int_distribution<> lifespanDist(particleEffect.minLifespan, particleEffect.maxLifespan);
 	std::uniform_int_distribution<> hueDist(particleEffect.minHue, particleEffect.maxHue);
 	std::uniform_real_distribution<> satDist(particleEffect.minSat, particleEffect.maxSat);
 	std::uniform_real_distribution<> valDist(particleEffect.minVal, particleEffect.maxVal);
 	std::uniform_real_distribution<> speedDist(particleEffect.minSpeed, particleEffect.maxSpeed);
-	std::uniform_real_distribution<> velDist(particleEffect.minAngle + rotate, particleEffect.maxAngle + rotate);
+	std::uniform_real_distribution<> velDist(particleEffect.minAngle, particleEffect.maxAngle);
 	std::uniform_real_distribution<> rotationDist(particleEffect.minRotation, particleEffect.maxRotation);
 	std::uniform_real_distribution<> xScaleDist(particleEffect.minXScale, particleEffect.maxXScale);
 	std::uniform_real_distribution<> yScaleDist(particleEffect.minYScale, particleEffect.maxYScale);
 	int numParticles = particlesDist(rng);
 	std::vector<std::future<bool>> futures;
 	std::mutex m;
+	offset = DEG2RAD * offset;
 	for(int thread=0;thread<NUMTHREADS;++thread){
 		futures.push_back(std::async(std::launch::async, 
 			[&]()->bool{
@@ -35,7 +36,7 @@ void ParticleEngine::makeEffect(sf::Vector2<int> pos, ParticleEffect particleEff
 						return true;
 					}
 					float angle=velDist(rng);
-					auto particle=std::make_shared<Particle>(pos, angle, speedDist(rng), rotationDist(rng), xScaleDist(rng), yScaleDist(rng), lifespanDist(rng), hsv(hueDist(rng), satDist(rng), valDist(rng)));
+					auto particle=std::make_shared<Particle>(pos, angle, speedDist(rng), rotationDist(rng), xScaleDist(rng), yScaleDist(rng), lifespanDist(rng), offset, hsv(hueDist(rng), satDist(rng), valDist(rng)));
 					{
 						std::lock_guard<std::mutex> guard(m);
 						particles.push_back(particle);
@@ -56,7 +57,7 @@ void ParticleEngine::updateParticles(sf::RenderWindow *window){
 	for(auto part : particles){
 		part->vertex.position = part->vertex.position + (part->vel * part->speed);
 		part->angle += part->rotation;
-		part->vel = sf::Vector2<float>(part->xScale * cos(part->angle), part->yScale * sin(part->angle));
+		part->vel = sf::Vector2f((part->xScale * cos(part->angle) * cos(part->offset) - part->yScale * sin(part->angle) * sin(part->offset)), (part->xScale * cos(part->angle) * sin(part->offset) + part->yScale * sin(part->angle) * cos(part->offset)));
 		--part->lifespan;
 		points[i++]=(part->vertex);
 	}
