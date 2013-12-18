@@ -41,7 +41,7 @@ int main(){
 	}
 	file.close();
 
-	sf::RenderWindow window(sf::VideoMode(screenWidth, screenHeight), "SFML works!", fullscreen ? sf::Style::Fullscreen : sf::Style::Titlebar|sf::Style::Close);
+	sf::RenderWindow window(sf::VideoMode(screenWidth, screenHeight), "holy particle engine, batman", fullscreen ? sf::Style::Fullscreen : sf::Style::Titlebar|sf::Style::Close);
 
 	ParticleEngine particleEngine(1000000);
 	ParticleEffect explode(root);
@@ -64,9 +64,9 @@ int main(){
 
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left)){
 			particleEngine.makeEffect(sf::Mouse::getPosition(window), ring);
+			// particleEngine.makeEffect(sf::Mouse::getPosition(window), ring, 90);
+			// particleEngine.makeEffect(sf::Mouse::getPosition(window), ring, 180);
 			particleEngine.makeEffect(sf::Mouse::getPosition(window), explode);
-			// particleEngine.makeEffect(sf::Mouse::getPosition(window), effect, 90);
-			// particleEngine.makeEffect(sf::Mouse::getPosition(window), effect, 180);
 		}
 
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Right)){

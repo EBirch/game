@@ -23,6 +23,10 @@ class ParticleEffect{
 		float maxAngle;
 		float minRotation;
 		float maxRotation;
+		float minXScale;
+		float maxXScale;
+		float minYScale;
+		float maxYScale;
 };
 
 #endif

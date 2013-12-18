@@ -19,6 +19,10 @@ ParticleEffect::ParticleEffect(Json::Value json){
 		maxVal = json.get("maxVal", 1).asDouble();
 		minRotation = 0.01745329251994 * json.get("minRotation", 0).asDouble();
 		maxRotation = 0.01745329251994 * json.get("maxRotation", 0).asDouble();
+		minXScale = json.get("minXScale", 1).asDouble();
+		maxXScale = json.get("maxXScale", 1).asDouble();
+		minYScale = json.get("minYScale", 1).asDouble();
+		maxYScale = json.get("maxYScale", 1).asDouble();
 	}
 	catch(const std::exception &error){
 		std::cerr<<"ParticleEffect construction exception: "<<error.what()<<std::endl;
