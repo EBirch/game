@@ -20,14 +20,14 @@ void ParticleEngine::makeEffect(sf::Vector2<int> pos, ParticleEffect particleEff
 	std::uniform_real_distribution<> satDist(particleEffect.minSat, particleEffect.maxSat);
 	std::uniform_real_distribution<> valDist(particleEffect.minVal, particleEffect.maxVal);
 	std::uniform_real_distribution<> speedDist(particleEffect.minSpeed, particleEffect.maxSpeed);
-	std::uniform_real_distribution<> velDist(particleEffect.minAngle, particleEffect.maxAngle);
+	std::uniform_real_distribution<> velDist(-particleEffect.minAngle, -particleEffect.maxAngle);
 	std::uniform_real_distribution<> rotationDist(particleEffect.minRotation, particleEffect.maxRotation);
 	std::uniform_real_distribution<> xScaleDist(particleEffect.minXScale, particleEffect.maxXScale);
 	std::uniform_real_distribution<> yScaleDist(particleEffect.minYScale, particleEffect.maxYScale);
 	int numParticles = particlesDist(rng);
 	std::vector<std::future<bool>> futures;
 	std::mutex m;
-	offset = DEG2RAD * offset;
+	offset = -(DEG2RAD * offset);
 	for(int thread=0;thread<NUMTHREADS;++thread){
 		futures.push_back(std::async(std::launch::async, 
 			[&]()->bool{
@@ -63,6 +63,7 @@ void ParticleEngine::updateParticles(sf::RenderWindow *window){
 	}
 	std::cout<<particles.size()<<std::endl;
 	window->draw(points);
+	killParticles();
 }
 
 void ParticleEngine::killParticles(){

@@ -1,30 +1,25 @@
 #include "./particleEffect.h"
-#include <json/json.h>
+#include "../parseHelpers.h"
 
-ParticleEffect::ParticleEffect(Json::Value json){
-	try{
-		minParticles = json.get("minParticles", 0).asInt();
-		maxParticles = json.get("maxParticles", 50).asInt();
-		minSpeed = json.get("minSpeed", 0).asDouble();
-		maxSpeed = json.get("maxSpeed", 1).asDouble();
-		minLifespan = json.get("minLifespan", 0).asInt();
-		maxLifespan = json.get("maxLifespan", 10).asInt();
-		minAngle = DEG2RAD * json.get("minAngle", 0).asDouble();
-		maxAngle = DEG2RAD * json.get("maxAngle", 360).asDouble();
-		minHue = json.get("minHue", 0).asInt();
-		maxHue = json.get("maxHue", 360).asInt();
-		minSat = json.get("minSat", 0).asDouble();
-		maxSat = json.get("maxSat", 1).asDouble();
-		minVal = json.get("minVal", 0).asDouble();
-		maxVal = json.get("maxVal", 1).asDouble();
-		minRotation = DEG2RAD * json.get("minRotation", 0).asDouble();
-		maxRotation = DEG2RAD * json.get("maxRotation", 0).asDouble();
-		minXScale = json.get("minXScale", 1).asDouble();
-		maxXScale = json.get("maxXScale", 1).asDouble();
-		minYScale = json.get("minYScale", 1).asDouble();
-		maxYScale = json.get("maxYScale", 1).asDouble();
-	}
-	catch(const std::exception &error){
-		std::cerr<<"ParticleEffect construction exception: "<<error.what()<<std::endl;
-	}
+ParticleEffect::ParticleEffect(Json::Value &json){
+	minParticles = get(json, "minParticles", 0);
+	maxParticles = get(json, "maxParticles", 0);
+	minSpeed = get(json, "minSpeed", 0.0f);
+	maxSpeed = get(json, "maxSpeed", 0.0f);
+	minLifespan = get(json, "minLifespan", 0);
+	maxLifespan = get(json, "maxLifespan", 0);
+	minAngle = DEG2RAD * get(json, "minAngle", 0.0f);
+	maxAngle = DEG2RAD * get(json, "maxAngle", 0.0f);
+	minHue = get(json, "minHue", 0);
+	maxHue = get(json, "maxHue", 0);
+	minSat = get(json, "minSat", 0.0f);
+	maxSat = get(json, "maxSat", 0.0f);
+	minVal = get(json, "minVal", 0.0f);
+	maxVal = get(json, "maxVal", 0.0f);
+	minRotation = DEG2RAD * get(json, "minRotation", 0.0f);
+	maxRotation = DEG2RAD * get(json, "maxRotation", 0.0f);
+	minXScale = get(json, "minXScale", 0.0f);
+	maxXScale = get(json, "maxXScale", 0.0f);
+	minYScale = get(json, "minYScale", 0.0f);
+	maxYScale = get(json, "maxYScale", 0.0f);
 }

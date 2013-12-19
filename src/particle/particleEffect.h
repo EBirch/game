@@ -1,12 +1,14 @@
 #ifndef PARTICLE_EFFECT_H
 #define PARTICLE_EFFECT_H
 
+#define DEG2RAD 0.01745329251994
+
 #include <string>
 #include <json/json.h>
 
 class ParticleEffect{
 	public:
-		ParticleEffect(Json::Value json);
+		ParticleEffect(Json::Value &json);
 		int minParticles;
 		int maxParticles;
 		int minLifespan;

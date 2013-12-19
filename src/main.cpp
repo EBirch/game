@@ -1,59 +1,28 @@
 #include <SFML/Graphics.hpp>
-#include <fstream>
 #include <iostream>
-#include <stdexcept>
-#include <json/json.h>
+#include "./parseHelpers.h"
 #include "./particle/particleEngine.h"
 
 int main(){
-	Json::Value root;
-	Json::Reader reader;
-	Json::StyledWriter writer;
+	Json::Value json;
 
-	int screenWidth = 1300;
-	int screenHeight = 700;
-	int maxFPS = 60;
-	bool fullscreen = false;
+	parse("./config.json", json);
 
-	std::fstream file("./config.json");
+	int screenWidth = get(json, "screenWidth", 1300);
+	int screenHeight = get(json, "screenHeight", 700);
+	int maxFPS = get(json, "maxFPS", 60);
+	int maxParticles = get(json, "maxParticles", 200000);
+	bool fullscreen = get(json, "fullscreen", false);
 
-	if(!reader.parse(file, root)){
-		std::cout<<"Error reading config file:\n"<<reader.getFormatedErrorMessages()<<std::endl;
-		return 0;
-	}
+	ParticleEngine particleEngine(maxParticles);
 
-	try{
-		screenWidth = root.get("screenWidth", 1300).asInt();
-		screenHeight = root.get("screenHeight", 700).asInt();
-		maxFPS = root.get("maxFPS", 60).asInt();
-		fullscreen = root.get("fullscreen", false).asBool();
-	}
-	catch(const std::exception &error){
-		std::cerr<<"Exception caught: "<<error.what()<<std::endl;
-	}
+	parse("./assets/particleEffects/explosion.json", json);
+	ParticleEffect explode(json);
 
-	file.close();
-
-	file.open("./assets/particleEffects/explosion.json");
-	if(!reader.parse(file, root)){
-		std::cout<<"Error reading config file:\n"<<reader.getFormatedErrorMessages()<<std::endl;
-		return 0;
-	}
-	file.close();
+	parse("./assets/particleEffects/ring.json", json);
+	ParticleEffect ring(json);
 
 	sf::RenderWindow window(sf::VideoMode(screenWidth, screenHeight), "holy particle engine, batman", fullscreen ? sf::Style::Fullscreen : sf::Style::Titlebar|sf::Style::Close);
-
-	ParticleEngine particleEngine(1000000);
-	ParticleEffect explode(root);
-
-	file.open("./assets/particleEffects/ring.json");
-	if(!reader.parse(file, root)){
-		std::cout<<"Error reading config file:\n"<<reader.getFormatedErrorMessages()<<std::endl;
-		return 0;
-	}
-	file.close();
-
-	ParticleEffect ring(root);
 
 	while (window.isOpen()){
 		sf::Event event;
@@ -63,9 +32,8 @@ int main(){
 		}
 
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left)){
-			particleEngine.makeEffect(sf::Mouse::getPosition(window), ring, 30);
-			particleEngine.makeEffect(sf::Mouse::getPosition(window), ring, 150);
-			// particleEngine.makeEffect(sf::Mouse::getPosition(window), ring, 180);
+			particleEngine.makeEffect(sf::Mouse::getPosition(window), ring, -15);
+			particleEngine.makeEffect(sf::Mouse::getPosition(window), ring, 40);
 			particleEngine.makeEffect(sf::Mouse::getPosition(window), explode);
 		}
 
@@ -75,7 +43,6 @@ int main(){
 
 		window.clear();
 		particleEngine.updateParticles(&window);
-		particleEngine.killParticles();
 		window.display();
 	}
 }

@@ -3,8 +3,8 @@
 	"maxParticles":5000,
 	"minSpeed":0,
 	"maxSpeed":2,
-	"minLifespan":90,
-	"maxLifespan":90,
+	"minLifespan":80,
+	"maxLifespan":100,
 	"minAngle":0,
 	"maxAngle":360,
 	"minHue":120,
@@ -15,8 +15,8 @@
 	"maxVal":0.9,
 	"minRotation":0,
 	"maxRotation":360,
-	"minXScale":1,
-	"maxXScale":1,
-	"minYScale":1,
-	"maxYScale":1
+	"minXScale":0.9,
+	"maxXScale":1.1,
+	"minYScale":0.9,
+	"maxYScale":1.1
 }
