@@ -1,0 +1,36 @@
+{
+	"0":[
+		{
+			"effect":"cone",
+			"offsetX":0,
+			"offsetY":0,
+			"rotation":0
+		},
+		{
+			"effect":"cone",
+			"offsetX":0,
+			"offsetY":0,
+			"rotation":90
+		},
+		{
+			"effect":"cone",
+			"offsetX":0,
+			"offsetY":0,
+			"rotation":180
+		},
+		{
+			"effect":"cone",
+			"offsetX":0,
+			"offsetY":0,
+			"rotation":270
+		}
+	],
+	"25":[
+		{
+			"effect":"explosion",
+			"offsetX":0,
+			"offsetY":0,
+			"rotation":0
+		}
+	]
+}

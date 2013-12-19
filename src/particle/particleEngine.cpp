@@ -61,7 +61,6 @@ void ParticleEngine::updateParticles(sf::RenderWindow *window){
 		--part->lifespan;
 		points[i++]=(part->vertex);
 	}
-	// std::cout<<particles.size()<<std::endl;
 	window->draw(points);
 	killParticles();
 }

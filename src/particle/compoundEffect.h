@@ -11,7 +11,7 @@ class CompoundEffect{
 	public:
 		CompoundEffect(Json::Value &json);
 		int end;
-		std::unordered_map<int, std::vector<std::tuple<std::shared_ptr<ParticleEffect>, float, float, float>>> effectMap;
+		std::unordered_map<int, std::vector<std::tuple<std::shared_ptr<ParticleEffect>, int, int, float>>> effectMap;
 };
 
 #endif
