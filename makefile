@@ -1,4 +1,4 @@
-LIBS = -lsfml-graphics -lsfml-window -lsfml-system ./lib/libjson.so
+LIBS = -lsfml-graphics -lsfml-window -lsfml-system -lboost_filesystem -lboost_system ./lib/libjson.so
 LIBPATH = -L /usr/local/lib/
 INCLUDE = -I ./lib/include
 OBJECTS = particle.o particleEngine.o particleEffect.o

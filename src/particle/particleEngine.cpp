@@ -13,17 +13,17 @@ ParticleEngine::ParticleEngine(int maxParticles):
 {
 }
 
-void ParticleEngine::makeEffect(sf::Vector2<int> pos, ParticleEffect particleEffect, float offset){
-	std::uniform_int_distribution<> particlesDist(particleEffect.minParticles, particleEffect.maxParticles);
-	std::uniform_int_distribution<> lifespanDist(particleEffect.minLifespan, particleEffect.maxLifespan);
-	std::uniform_int_distribution<> hueDist(particleEffect.minHue, particleEffect.maxHue);
-	std::uniform_real_distribution<> satDist(particleEffect.minSat, particleEffect.maxSat);
-	std::uniform_real_distribution<> valDist(particleEffect.minVal, particleEffect.maxVal);
-	std::uniform_real_distribution<> speedDist(particleEffect.minSpeed, particleEffect.maxSpeed);
-	std::uniform_real_distribution<> velDist(-particleEffect.minAngle, -particleEffect.maxAngle);
-	std::uniform_real_distribution<> rotationDist(particleEffect.minRotation, particleEffect.maxRotation);
-	std::uniform_real_distribution<> xScaleDist(particleEffect.minXScale, particleEffect.maxXScale);
-	std::uniform_real_distribution<> yScaleDist(particleEffect.minYScale, particleEffect.maxYScale);
+void ParticleEngine::makeEffect(sf::Vector2<int> pos, std::shared_ptr<ParticleEffect> particleEffect, float offset){
+	std::uniform_int_distribution<> particlesDist(particleEffect->minParticles, particleEffect->maxParticles);
+	std::uniform_int_distribution<> lifespanDist(particleEffect->minLifespan, particleEffect->maxLifespan);
+	std::uniform_int_distribution<> hueDist(particleEffect->minHue, particleEffect->maxHue);
+	std::uniform_real_distribution<> satDist(particleEffect->minSat, particleEffect->maxSat);
+	std::uniform_real_distribution<> valDist(particleEffect->minVal, particleEffect->maxVal);
+	std::uniform_real_distribution<> speedDist(particleEffect->minSpeed, particleEffect->maxSpeed);
+	std::uniform_real_distribution<> velDist(-particleEffect->minAngle, -particleEffect->maxAngle);
+	std::uniform_real_distribution<> rotationDist(particleEffect->minRotation, particleEffect->maxRotation);
+	std::uniform_real_distribution<> xScaleDist(particleEffect->minXScale, particleEffect->maxXScale);
+	std::uniform_real_distribution<> yScaleDist(particleEffect->minYScale, particleEffect->maxYScale);
 	int numParticles = particlesDist(rng);
 	std::vector<std::future<bool>> futures;
 	std::mutex m;
@@ -61,7 +61,7 @@ void ParticleEngine::updateParticles(sf::RenderWindow *window){
 		--part->lifespan;
 		points[i++]=(part->vertex);
 	}
-	std::cout<<particles.size()<<std::endl;
+	// std::cout<<particles.size()<<std::endl;
 	window->draw(points);
 	killParticles();
 }
