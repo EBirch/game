@@ -1,5 +1,4 @@
 #include "./particleEffect.h"
-#include "../parseHelpers.h"
 
 ParticleEffect::ParticleEffect(Json::Value &json){
 	minParticles = get(json, "minParticles", 0);

@@ -1,21 +1,24 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <boost/filesystem.hpp>
-// #include <boost/foreach.hpp>
 #include <unordered_map>
 #include <algorithm>
 #include "./parseHelpers.h"
 #include "./particle/particleEngine.h"
+#include "./particle/compoundEffect.h"
 
 template <class T>
 void load(std::string path, std::unordered_map<std::string, std::shared_ptr<T>, std::hash<std::string>, std::equal_to<std::string>, std::allocator<std::pair<std::string const, std::shared_ptr<T>>>> &map);
+
+std::unordered_map<std::string, std::shared_ptr<ParticleEffect>> particleEffects;
 
 int main(){
 	Json::Value json;
 
 	parse("./config.json", json);
 
-	std::unordered_map<std::string, std::shared_ptr<ParticleEffect>> particleEffects;
+
+	// std::unordered_map<std::string, std::shared_ptr<ParticleEffect>> particleEffects;
 
 	load("./assets/particleEffects", particleEffects);
 
@@ -24,6 +27,9 @@ int main(){
 	int maxFPS = get(json, "maxFPS", 60);
 	int maxParticles = get(json, "maxParticles", 200000);
 	bool fullscreen = get(json, "fullscreen", false);
+
+	parse("./assets/compoundEffects/first.json", json);
+	CompoundEffect effect(json);
 
 	ParticleEngine particleEngine(maxParticles);
 

@@ -1,0 +1,24 @@
+{
+	"0":[
+		{
+			"effect":"ring",
+			"offsetX":0,
+			"offsetY":0,
+			"rotation":-15
+		},
+		{
+			"effect":"ring",
+			"offsetX":0,
+			"offsetY":0,
+			"rotation":40
+		}
+	],
+	"25":[
+		{
+			"effect":"explosion",
+			"offsetX":0,
+			"offsetY":0,
+			"rotation":0
+		}
+	]
+}

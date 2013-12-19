@@ -4,7 +4,7 @@
 #define DEG2RAD 0.01745329251994
 
 #include <string>
-#include <json/json.h>
+#include "../parseHelpers.h"
 
 class ParticleEffect{
 	public:
