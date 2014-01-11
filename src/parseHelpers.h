@@ -13,7 +13,6 @@ std::string getAs(Json::Value &json, std::string val, std::string fallback);
 
 template<class T>
 T get(Json::Value &json, std::string val, T fallback){
-	T temp;
 	try{
 		return getAs(json, val, fallback);
 	}

@@ -33,9 +33,6 @@ int main(){
 
 	ParticleEngine particleEngine(maxParticles);
 
-	auto ring=particleEffects["ring"];
-	auto explode=particleEffects["explode"];
-
 	sf::RenderWindow window(sf::VideoMode(screenWidth, screenHeight), "holy particle engine, batman", fullscreen ? sf::Style::Fullscreen : sf::Style::Titlebar|sf::Style::Close);
 
 	int frame = 0;

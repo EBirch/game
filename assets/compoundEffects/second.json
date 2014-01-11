@@ -25,7 +25,27 @@
 			"rotation":270
 		}
 	],
-	"25":[
+	"35":[
+		{
+			"effect":"ring",
+			"offsetX":0,
+			"offsetY":0,
+			"rotation":30
+		},
+		{
+			"effect":"ring",
+			"offsetX":0,
+			"offsetY":0,
+			"rotation":90
+		},
+		{
+			"effect":"ring",
+			"offsetX":0,
+			"offsetY":0,
+			"rotation":150
+		}
+	],
+	"70":[
 		{
 			"effect":"explosion",
 			"offsetX":0,

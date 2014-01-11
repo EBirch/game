@@ -1,6 +1,6 @@
 {
-	"minParticles":300,
-	"maxParticles":400,
+	"minParticles":3000,
+	"maxParticles":4000,
 	"minSpeed":0,
 	"maxSpeed":11,
 	"minLifespan":35,
@@ -13,10 +13,10 @@
 	"maxSat":0.9,
 	"minVal":0.7,
 	"maxVal":0.9,
-	"minRotation":7,
-	"maxRotation":11,
-	"minXScale":1,
-	"maxXScale":1,
+	"minRotation":-7,
+	"maxRotation":-11,
+	"minXScale":5,
+	"maxXScale":5,
 	"minYScale":1,
 	"maxYScale":1
 }
