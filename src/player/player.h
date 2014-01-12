@@ -7,9 +7,11 @@
 class Player{
 	public:
 		sf::Vector2f pos;
-		sf::Vector2f movement;
-		sf::Vector2f acceleration;
+		sf::Vector2f force;
+		sf::Vector2f vel;
+		float mass;
 		Player(sf::Vector2f pos);
+		void update(float dt);
 };
 
 #endif

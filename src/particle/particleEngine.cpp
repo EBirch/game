@@ -50,7 +50,7 @@ void ParticleEngine::makeEffect(sf::Vector2<int> pos, std::shared_ptr<ParticleEf
 	}
 }
 
-void ParticleEngine::updateParticles(sf::RenderWindow *window){
+void ParticleEngine::update(sf::RenderWindow *window, int frame){
 	displaySize = window->getSize();
 	sf::VertexArray points(sf::Points, particles.size());
 	int i = 0;
@@ -63,6 +63,25 @@ void ParticleEngine::updateParticles(sf::RenderWindow *window){
 	}
 	window->draw(points);
 	killParticles();
+	updateActiveEffects(frame);
+}
+
+void ParticleEngine::updateActiveEffects(int frame){
+	std::for_each(activeEffects.begin(), activeEffects.end(),
+		[&](std::tuple<std::shared_ptr<CompoundEffect>, int, sf::Vector2<int>> compound){
+			auto effect = std::get<0>(compound)->effectMap.find(frame - std::get<1>(compound));
+			if(effect != std::get<0>(compound)->effectMap.end()){
+				auto pos = std::get<2>(compound);
+				std::for_each(effect->second.begin(), effect->second.end(),
+					[&](std::tuple<std::shared_ptr<ParticleEffect>, int, int, float> timestep){
+						makeEffect(sf::Vector2<int>(pos.x + std::get<1>(timestep), pos.y + std::get<2>(timestep)), std::get<0>(timestep), std::get<3>(timestep));
+					});
+			}
+		});
+	activeEffects.erase(std::remove_if(activeEffects.begin(), activeEffects.end(),
+		[&](std::tuple<std::shared_ptr<CompoundEffect>, int, sf::Vector2<int>> compound){
+			return (frame - std::get<1>(compound)) > std::get<0>(compound)->end;
+		}), activeEffects.end());
 }
 
 void ParticleEngine::killParticles(){
@@ -74,6 +93,7 @@ void ParticleEngine::killParticles(){
 
 void ParticleEngine::killAll(){
 	particles.clear();
+	activeEffects.clear();
 }
 
 sf::Color ParticleEngine::hsv(int hue, float sat, float val){

@@ -3,6 +3,7 @@
 
 #include "./particle.h"
 #include "./particleEffect.h"
+#include "./compoundEffect.h"
 #include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
 #include <vector>
@@ -13,11 +14,13 @@ class ParticleEngine{
 	public:
 		ParticleEngine(int maxParticles);
 		sf::Color hsv(int hue, float sat, float val);
-		void updateParticles(sf::RenderWindow *window = NULL);
+		void update(sf::RenderWindow *window, int frame);
 		void killParticles();
 		void killAll();
 		void makeEffect(sf::Vector2<int> pos, std::shared_ptr<ParticleEffect> particleEffect, float offset = 0);
+		void updateActiveEffects(int frame);
 
+		std::vector<std::tuple<std::shared_ptr<CompoundEffect>, int, sf::Vector2<int>>> activeEffects; //TODO: move this back to private
 	private:
 		std::vector<std::shared_ptr<Particle>> particles;
 		int maxParticles;
