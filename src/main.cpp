@@ -37,21 +37,25 @@ int main(){
 	int frame = 0; //change to dt
 	bool active = false;
 
-	while (window.isOpen()){
+	while(window.isOpen()){
 		sf::Event event;
-		while (window.pollEvent(event)){
-			if (event.type == sf::Event::Closed)
+		while(window.pollEvent(event)){
+			if(event.type == sf::Event::Closed)
 				window.close();
 		}
 
 
 		//change this to an input handler later
-		if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && !active){
+		if(sf::Mouse::isButtonPressed(sf::Mouse::Left) && !active){
 			active = true;
 			// particleEngine.activeEffects.push_back(std::make_tuple(compoundEffects.at("second"), frame, sf::Mouse::getPosition(window)));
-			particleEngine.addUniformDist(100000, screenWidth, screenHeight);
+			particleEngine.addUniformDist(150000, screenWidth, screenHeight);
 		}
-		if (sf::Mouse::isButtonPressed(sf::Mouse::Right)){
+		if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space)){
+			particleEngine.applyForce(sf::Mouse::getPosition(window), -50, 25);
+			// std::cout<<"Adding force\n";
+		}
+		if(sf::Mouse::isButtonPressed(sf::Mouse::Right)){
 			active = false;
 			particleEngine.killAll();
 		}

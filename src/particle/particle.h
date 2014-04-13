@@ -9,7 +9,7 @@
 
 class Particle{
 	public:
-		Particle(sf::Vector2<int> pos, float angle, float speed, float rotation, float xScale, float yScale, int lifespan, float offset, sf::Color color, bool physics);
+		Particle(sf::Vector2<int> pos, float angle, float speed, float rotation, float xScale, float yScale, int lifespan, float offset, sf::Color color, bool physics, bool angular);
 		sf::Vertex vertex;
 		sf::Vector2<float> vel;
 		float angle;
@@ -20,6 +20,7 @@ class Particle{
 		float offset;
 		int lifespan;
 		bool physics;
+		bool angular;
 };
 
 #endif

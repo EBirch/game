@@ -36,7 +36,7 @@ void ParticleEngine::makeEffect(sf::Vector2<int> pos, std::shared_ptr<ParticleEf
 						return true;
 					}
 					float angle=velDist(rng);
-					auto particle=std::make_shared<Particle>(pos, angle, speedDist(rng), rotationDist(rng), xScaleDist(rng), yScaleDist(rng), lifespanDist(rng), offset, hsv(hueDist(rng), satDist(rng), valDist(rng)), particleEffect->physics);
+					auto particle=std::make_shared<Particle>(pos, angle, speedDist(rng), rotationDist(rng), xScaleDist(rng), yScaleDist(rng), lifespanDist(rng), offset, hsv(hueDist(rng), satDist(rng), valDist(rng)), particleEffect->physics, true);
 					{
 						std::lock_guard<std::mutex> guard(m);
 						particles.push_back(particle);
@@ -56,10 +56,28 @@ void ParticleEngine::update(sf::RenderWindow *window, int frame){
 	int i = 0;
 	for(auto part : particles){
 		part->vertex.position = part->vertex.position + (part->vel * part->speed);
+		if(part->vertex.position.x > displaySize.x){
+			part->vertex.position.x = displaySize.x;
+			part->vel.x *= -1;
+		}
+		if(part->vertex.position.x < 0){
+			part->vertex.position.x = 0;
+			part->vel.x *= -1;
+		}
+		if(part->vertex.position.y > displaySize.y){
+			part->vertex.position.y = displaySize.y;
+			part->vel.y *= -1;
+		}
+		if(part->vertex.position.y < 0){
+			part->vertex.position.y = 0;
+			part->vel.y *= -1;
+		}
 		part->angle += part->rotation;
-		part->vel = sf::Vector2f((part->xScale * cos(part->angle) * cos(part->offset) - part->yScale * sin(part->angle) * sin(part->offset)), (part->xScale * cos(part->angle) * sin(part->offset) + part->yScale * sin(part->angle) * cos(part->offset)));
+		if(part->angular){
+			part->vel = sf::Vector2f((part->xScale * cos(part->angle) * cos(part->offset) - part->yScale * sin(part->angle) * sin(part->offset)), (part->xScale * cos(part->angle) * sin(part->offset) + part->yScale * sin(part->angle) * cos(part->offset)));
+		}
 		if(part->physics){
-			part->vel = sf::Vector2f(part->vel.x * 0.7, part->vel.y * 0.7); //TODO: allow for variable friction
+			part->vel = sf::Vector2f(part->vel.x * 0.97, part->vel.y * 0.97); //TODO: allow for variable friction
 		}
 		--part->lifespan;
 		points[i++]=(part->vertex);
@@ -96,8 +114,28 @@ void ParticleEngine::addUniformDist(int num, int width, int height){
 	// std::cout<<num<<": "<<width<<", "<<height<<": "<<dist<<std::endl;
 	for(double y = 0; y < height; y += dist){
 		for(double x = 0; x < width; x += dist){
-			particles.push_back(std::make_shared<Particle>(sf::Vector2<int>((int)x, (int)y), 0, 0, 0, 0, 0, 300000000, 0, hsv(hueDist(rng), satDist(rng), valDist(rng)), true));
+			particles.push_back(std::make_shared<Particle>(sf::Vector2<int>((int)x, (int)y), 0, 1, 0, 1, 1, 300000000, 0, hsv(hueDist(rng), satDist(rng), valDist(rng)), true, false));
 		}
+	}
+}
+
+void ParticleEngine::applyForce(sf::Vector2<int> pos, float force, float radius){
+	for(auto part : particles){
+		if(!part->physics){
+			continue;
+		}
+		double dist = radius - sqrt(pow(part->vertex.position.x - pos.x, 2) + pow(part->vertex.position.y - pos.y, 2));
+		if(dist <= 0){
+			continue;
+		}
+		// std::cout<<"doing thing\n";
+		part->angle = atan((double)(part->vertex.position.y - pos.y) / (part->vertex.position.x - pos.x)) + part->rotation;
+		auto temp = sf::Vector2f(part->vertex.position.x - pos.x, part->vertex.position.y - pos.y);
+		double scale = sqrt(pow(temp.x, 2) + pow(temp.y, 2));
+		temp = sf::Vector2f(temp.x / scale, temp.y / scale);
+		// part->vel = sf::Vector2f((part->xScale * cos(part->angle) * cos(part->offset) - part->yScale * sin(part->angle) * sin(part->offset)), (part->xScale * cos(part->angle) * sin(part->offset) + part->yScale * sin(part->angle) * cos(part->offset)));
+		part->vel = sf::Vector2f(temp.x * (force * (dist / radius)), temp.y * (force * (dist / radius)));
+		// part->vertex.position = part->vertex.position + (part->vel * part->speed);
 	}
 }
 
