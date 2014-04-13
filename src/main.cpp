@@ -35,6 +35,7 @@ int main(){
 	sf::RenderWindow window(sf::VideoMode(screenWidth, screenHeight), "holy particle engine, batman", fullscreen ? sf::Style::Fullscreen : sf::Style::Titlebar|sf::Style::Close);
 
 	int frame = 0; //change to dt
+	bool active = false;
 
 	while (window.isOpen()){
 		sf::Event event;
@@ -45,10 +46,13 @@ int main(){
 
 
 		//change this to an input handler later
-		if (sf::Mouse::isButtonPressed(sf::Mouse::Left)){
-			particleEngine.activeEffects.push_back(std::make_tuple(compoundEffects.at("second"), frame, sf::Mouse::getPosition(window)));
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && !active){
+			active = true;
+			// particleEngine.activeEffects.push_back(std::make_tuple(compoundEffects.at("second"), frame, sf::Mouse::getPosition(window)));
+			particleEngine.addUniformDist(100000, screenWidth, screenHeight);
 		}
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Right)){
+			active = false;
 			particleEngine.killAll();
 		}
 

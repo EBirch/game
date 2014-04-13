@@ -1,7 +1,7 @@
 #include "./particle.h"
 #include <SFML/System.hpp>
 
-Particle::Particle(sf::Vector2<int> pos, float angle, float speed, float rotation, float xScale, float yScale, int lifespan, float offset, sf::Color color):
+Particle::Particle(sf::Vector2<int> pos, float angle, float speed, float rotation, float xScale, float yScale, int lifespan, float offset, sf::Color color, bool physics):
 	angle(angle)
 	,speed(speed)
 	,lifespan(lifespan)
@@ -11,5 +11,6 @@ Particle::Particle(sf::Vector2<int> pos, float angle, float speed, float rotatio
 	,xScale(xScale)
 	,yScale(yScale)
 	,offset(offset)
+	,physics(physics)
 {
 }

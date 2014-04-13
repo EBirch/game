@@ -1,0 +1,34 @@
+{
+	"0":[
+		{
+			"effect":"test",
+			"offsetX":0,
+			"offsetY":0,
+			"rotation":0
+		},
+		{
+			"effect":"ring",
+			"offsetX":0,
+			"offsetY":0,
+			"rotation":30
+		},
+		{
+			"effect":"ring",
+			"offsetX":0,
+			"offsetY":0,
+			"rotation":-30
+		},
+		{
+			"effect":"laser",
+			"offsetX":0,
+			"offsetY":0,
+			"rotation":180
+		},
+		{
+			"effect":"laser",
+			"offsetX":0,
+			"offsetY":0,
+			"rotation":0
+		}
+	]
+}

@@ -21,4 +21,5 @@ ParticleEffect::ParticleEffect(Json::Value &json){
 	maxXScale = get(json, "maxXScale", 0.0f);
 	minYScale = get(json, "minYScale", 0.0f);
 	maxYScale = get(json, "maxYScale", 0.0f);
+	physics = get(json, "physics", false);
 }

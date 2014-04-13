@@ -29,6 +29,7 @@ class ParticleEffect{
 		float maxXScale;
 		float minYScale;
 		float maxYScale;
+		bool physics;
 };
 
 #endif

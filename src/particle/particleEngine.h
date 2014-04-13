@@ -19,6 +19,7 @@ class ParticleEngine{
 		void killAll();
 		void makeEffect(sf::Vector2<int> pos, std::shared_ptr<ParticleEffect> particleEffect, float offset = 0);
 		void updateActiveEffects(int frame);
+		void addUniformDist(int num, int width, int height);
 
 		std::vector<std::tuple<std::shared_ptr<CompoundEffect>, int, sf::Vector2<int>>> activeEffects; //TODO: move this back to private
 	private:

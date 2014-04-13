@@ -4,7 +4,7 @@
 #include <future>
 #include <mutex>
 #include <algorithm>
-const int NUMTHREADS=8;
+const int NUMTHREADS=1;
 
 ParticleEngine::ParticleEngine(int maxParticles):
 	maxParticles(maxParticles)
@@ -36,7 +36,7 @@ void ParticleEngine::makeEffect(sf::Vector2<int> pos, std::shared_ptr<ParticleEf
 						return true;
 					}
 					float angle=velDist(rng);
-					auto particle=std::make_shared<Particle>(pos, angle, speedDist(rng), rotationDist(rng), xScaleDist(rng), yScaleDist(rng), lifespanDist(rng), offset, hsv(hueDist(rng), satDist(rng), valDist(rng)));
+					auto particle=std::make_shared<Particle>(pos, angle, speedDist(rng), rotationDist(rng), xScaleDist(rng), yScaleDist(rng), lifespanDist(rng), offset, hsv(hueDist(rng), satDist(rng), valDist(rng)), particleEffect->physics);
 					{
 						std::lock_guard<std::mutex> guard(m);
 						particles.push_back(particle);
@@ -58,9 +58,13 @@ void ParticleEngine::update(sf::RenderWindow *window, int frame){
 		part->vertex.position = part->vertex.position + (part->vel * part->speed);
 		part->angle += part->rotation;
 		part->vel = sf::Vector2f((part->xScale * cos(part->angle) * cos(part->offset) - part->yScale * sin(part->angle) * sin(part->offset)), (part->xScale * cos(part->angle) * sin(part->offset) + part->yScale * sin(part->angle) * cos(part->offset)));
+		if(part->physics){
+			part->vel = sf::Vector2f(part->vel.x * 0.7, part->vel.y * 0.7); //TODO: allow for variable friction
+		}
 		--part->lifespan;
 		points[i++]=(part->vertex);
 	}
+	// std::cout<<particles.size()<<std::endl;
 	window->draw(points);
 	killParticles();
 	updateActiveEffects(frame);
@@ -82,6 +86,19 @@ void ParticleEngine::updateActiveEffects(int frame){
 		[&](std::tuple<std::shared_ptr<CompoundEffect>, int, sf::Vector2<int>> compound){
 			return (frame - std::get<1>(compound)) > std::get<0>(compound)->end;
 		}), activeEffects.end());
+}
+
+void ParticleEngine::addUniformDist(int num, int width, int height){
+	double dist = sqrt((double)(width * height) / num);
+	std::uniform_int_distribution<> hueDist(0, 360);
+	std::uniform_real_distribution<> satDist(0, 1);
+	std::uniform_real_distribution<> valDist(0, 1);
+	// std::cout<<num<<": "<<width<<", "<<height<<": "<<dist<<std::endl;
+	for(double y = 0; y < height; y += dist){
+		for(double x = 0; x < width; x += dist){
+			particles.push_back(std::make_shared<Particle>(sf::Vector2<int>((int)x, (int)y), 0, 0, 0, 0, 0, 300000000, 0, hsv(hueDist(rng), satDist(rng), valDist(rng)), true));
+		}
+	}
 }
 
 void ParticleEngine::killParticles(){
