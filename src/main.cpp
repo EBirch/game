@@ -48,11 +48,11 @@ int main(){
 		//change this to an input handler later
 		if(sf::Mouse::isButtonPressed(sf::Mouse::Left) && !active){
 			active = true;
-			// particleEngine.activeEffects.push_back(std::make_tuple(compoundEffects.at("second"), frame, sf::Mouse::getPosition(window)));
-			particleEngine.addUniformDist(150000, screenWidth, screenHeight);
+			particleEngine.activeEffects.push_back(std::make_tuple(compoundEffects.at("second"), frame, sf::Mouse::getPosition(window)));
+			// particleEngine.addUniformDist(150000, screenWidth, screenHeight);
 		}
 		if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space)){
-			particleEngine.applyForce(sf::Mouse::getPosition(window), -50, 25);
+			particleEngine.applyForce(sf::Mouse::getPosition(window), -5, 350);
 			// std::cout<<"Adding force\n";
 		}
 		if(sf::Mouse::isButtonPressed(sf::Mouse::Right)){

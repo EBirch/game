@@ -3,8 +3,10 @@
 	"maxParticles":4000,
 	"minSpeed":10,
 	"maxSpeed":11,
-	"minLifespan":35,
-	"maxLifespan":40,
+	// "minLifespan":35,
+	"minLifespan":1000000,
+	// "maxLifespan":40,
+	"maxLifespan":2000000,
 	"minAngle":0,
 	"maxAngle":360,
 	"minHue":-20,
@@ -18,5 +20,6 @@
 	"minXScale":1.5,
 	"maxXScale":2.5,
 	"minYScale":0.5,
-	"maxYScale":0.5
+	"maxYScale":0.5,
+	"physics":true
 }
