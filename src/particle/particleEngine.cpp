@@ -78,6 +78,7 @@ void ParticleEngine::update(sf::RenderWindow *window, int frame){
 		}
 		if(part->physics){
 			part->vel = sf::Vector2f(part->vel.x * 0.995, part->vel.y * 0.995); //TODO: allow for variable friction
+			part->speed *= 0.999;
 		}
 		--part->lifespan;
 		points[i++]=(part->vertex);
@@ -135,6 +136,7 @@ void ParticleEngine::applyForce(sf::Vector2<int> pos, float force, float radius)
 		temp = sf::Vector2f(temp.x / scale, temp.y / scale);
 		// part->vel = sf::Vector2f((part->xScale * cos(part->angle) * cos(part->offset) - part->yScale * sin(part->angle) * sin(part->offset)), (part->xScale * cos(part->angle) * sin(part->offset) + part->yScale * sin(part->angle) * cos(part->offset)));
 		part->vel = sf::Vector2f(temp.x * (force * (dist / radius)), temp.y * (force * (dist / radius)));
+		// part->speed *= 1 + 0.025 * (dist / radius);
 		// part->vertex.position = part->vertex.position + (part->vel * part->speed);
 	}
 }

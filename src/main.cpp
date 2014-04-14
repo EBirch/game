@@ -49,10 +49,10 @@ int main(){
 		if(sf::Mouse::isButtonPressed(sf::Mouse::Left) && !active){
 			active = true;
 			particleEngine.activeEffects.push_back(std::make_tuple(compoundEffects.at("second"), frame, sf::Mouse::getPosition(window)));
-			// particleEngine.addUniformDist(150000, screenWidth, screenHeight);
+			// particleEngine.addUniformDist(100000, screenWidth, screenHeight);
 		}
 		if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space)){
-			particleEngine.applyForce(sf::Mouse::getPosition(window), -5, 350);
+			particleEngine.applyForce(sf::Mouse::getPosition(window), -10, 350);
 			// std::cout<<"Adding force\n";
 		}
 		if(sf::Mouse::isButtonPressed(sf::Mouse::Right)){
